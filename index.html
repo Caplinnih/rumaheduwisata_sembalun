@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<title id="pageTitle">Memuat…</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:#f8faf9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;}
+  *{box-sizing:border-box;}
+
+  /* Iframe penuh layar — tanpa border/scrollbar ganda supaya terasa seperti
+     situs native, bukan halaman yang "membungkus" halaman lain. */
+  #appFrame{
+    position:fixed; inset:0;
+    width:100%; height:100%; height:100dvh;
+    border:none; display:block; background:#f8faf9;
+  }
+
+  /* Skeleton loading — dicopy dari palet desain aplikasi (emerald/heritage)
+     supaya transisi ke konten asli terasa mulus, tidak ada "flash" putih. */
+  #loader{
+    position:fixed; inset:0; z-index:10;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    background:#f8faf9; transition:opacity .35s ease, visibility .35s ease;
+  }
+  #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+  .spinner{
+    width:38px; height:38px; border-radius:50%;
+    border:3px solid #d1fae5; border-top-color:#065f46;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #loaderText{font-size:13.5px; font-weight:600; color:#064e3b; letter-spacing:.01em;}
+
+  /* Pesan fallback kalau gasExecUrl belum diisi/salah */
+  #configError{
+    position:fixed; inset:0; z-index:20; display:none;
+    align-items:center; justify-content:center; padding:32px; text-align:center;
+    background:#f8faf9; font-size:14px; color:#4b5563; line-height:1.6;
+  }
+  #configError.show{display:flex;}
+  #configError code{background:#eef2f0; padding:2px 6px; border-radius:4px; font-size:12.5px;}
+</style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="spinner"></div>
+    <div id="loaderText">Memuat…</div>
+  </div>
+
+  <div id="configError">
+    <div>
+      ⚠️ URL deployment Google Apps Script belum diatur.<br><br>
+      Buka file <code>config.js</code> di repo ini, isi <code>gasExecUrl</code>
+      dengan URL <code>/exec</code> hasil deploy Web App kamu, lalu commit &amp; push.
+    </div>
+  </div>
+
+  <iframe id="appFrame" title="Aplikasi" allow="clipboard-write"></iframe>
+
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      var cfg = window.APP_CONFIG || {};
+      var loader = document.getElementById('loader');
+      var loaderText = document.getElementById('loaderText');
+      var errorBox = document.getElementById('configError');
+      var frame = document.getElementById('appFrame');
+
+      document.getElementById('pageTitle').textContent = cfg.title || 'Aplikasi';
+      loaderText.textContent = cfg.loadingText || 'Memuat…';
+
+      var url = cfg.gasExecUrl || '';
+      var isConfigured = url && url.indexOf('GANTI_DENGAN') === -1 && /^https:\/\/script\.google(usercontent)?\.com\//.test(url);
+
+      if (!isConfigured) {
+        loader.classList.add('hide');
+        errorBox.classList.add('show');
+        return;
+      }
+
+      frame.src = url;
+      frame.addEventListener('load', function () {
+        loader.classList.add('hide');
+      });
+      // Jaring pengaman: kalau event 'load' terlambat/tidak terpicu (koneksi lambat,
+      // browser tertentu), sembunyikan loader setelah beberapa detik supaya tidak
+      // "menggantung" selamanya di layar loading.
+      setTimeout(function () { loader.classList.add('hide'); }, 9000);
+    })();
+  </script>
+</body>
+</html>
