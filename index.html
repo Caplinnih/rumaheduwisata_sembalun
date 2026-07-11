@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<!-- Preconnect ke domain Google supaya koneksi (DNS + TLS) sudah "dihangatkan"
+     sebelum iframe mulai dimuat -> mempercepat waktu sampai konten pertama tampil. -->
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<link rel="dns-prefetch" href="https://script.google.com">
+<link rel="dns-prefetch" href="https://script.googleusercontent.com">
 <title id="pageTitle">Memuat…</title>
 <style>
   html,body{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:#f8faf9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;}
@@ -21,7 +27,7 @@
   #loader{
     position:fixed; inset:0; z-index:10;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
-    background:#f8faf9; transition:opacity .35s ease, visibility .35s ease;
+    background:#f8faf9; transition:opacity .22s ease, visibility .22s ease;
   }
   #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
   .spinner{
@@ -81,13 +87,26 @@
       }
 
       frame.src = url;
-      frame.addEventListener('load', function () {
+
+      /* -----------------------------------------------------------------
+         Strategi peralihan cepat:
+         Event 'load' pada iframe baru terpicu setelah SEMUA resource di
+         dalamnya selesai (semua gambar produk, font, dsb) — itu bisa
+         memakan 10-15 detik meski konten sebenarnya sudah siap dilihat
+         jauh lebih cepat, karena aplikasi di dalam iframe SUDAH punya
+         skeleton loading sendiri (shimmer) yang tampil begitu HTML-nya
+         mulai dirender. Jadi loader wrapper ini sengaja disembunyikan
+         cepat (maks ~1.6 detik) supaya user langsung melihat skeleton asli
+         aplikasi alih-alih menatap spinner generik terlalu lama.
+      ----------------------------------------------------------------- */
+      var revealed = false;
+      function reveal() {
+        if (revealed) return;
+        revealed = true;
         loader.classList.add('hide');
-      });
-      // Jaring pengaman: kalau event 'load' terlambat/tidak terpicu (koneksi lambat,
-      // browser tertentu), sembunyikan loader setelah beberapa detik supaya tidak
-      // "menggantung" selamanya di layar loading.
-      setTimeout(function () { loader.classList.add('hide'); }, 9000);
+      }
+      frame.addEventListener('load', reveal);
+      setTimeout(reveal, 1600); // batas atas: paksa tampil walau iframe belum "load" penuh
     })();
   </script>
 </body>
