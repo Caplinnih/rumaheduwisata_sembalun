@@ -8,7 +8,7 @@
 window.APP_CONFIG = {
   // Ganti dengan URL deployment GAS kamu, contoh:
   // "https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxx/exec"
-  gasExecUrl: "https://script.google.com/macros/s/AKfycbwjX14fOTLkTcAVVC2fODkvi9m5SqzGBYgRUMRNhbxgBs5wz_w3J9kXyuE8lGPaSaA1qw/exec",
+  gasExecUrl: "https://script.google.com/macros/s/AKfycbz2Q8AO4exWxV9nUwuu9jNFNsBYks8c27sVCnrKeGLJ5Q53OD0Uu4_H2BerpAJaxxjU7g/exec",
 
   // Judul tab browser & teks loading
   title: "Rumah Eduwisata Sembalun",
