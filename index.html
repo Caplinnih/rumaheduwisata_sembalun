@@ -1,114 +1,215 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1qFe_QpjdC1OVU0ktJobtQmh8rEzaxx3">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-<!-- Preconnect ke domain Google supaya koneksi (DNS + TLS) sudah "dihangatkan"
-     sebelum iframe mulai dimuat -> mempercepat waktu sampai konten pertama tampil. -->
+
+<title id="pageTitle">Rumah Eduwisata Sembalun</title>
+
+<!-- Favicon -->
+
+<link rel="icon" href="/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- PWA -->
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#065f46">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Rumah Eduwisata">
+
+<!-- SEO -->
+
+<meta name="description" content="Rumah Eduwisata Sembalun - Belajar, Menikmati, dan Mengalami Sembalun">
+
+<!-- Open Graph -->
+
+<meta property="og:title" content="Rumah Eduwisata Sembalun">
+<meta property="og:description" content="Belajar, Menikmati, dan Mengalami Sembalun">
+<meta property="og:image" content="https://domainanda.vercel.app/icon-512.png">
+<meta property="og:url" content="https://rumah-eduwisata-sembalun.vercel.app">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rumah Eduwisata Sembalun">
+
+<!-- Twitter -->
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rumah Eduwisata Sembalun">
+<meta name="twitter:description" content="Belajar, Menikmati, dan Mengalami Sembalun">
+<meta name="twitter:image" content="https://domainanda.vercel.app/icon-512.png">
+
+<!-- Performance -->
+
 <link rel="preconnect" href="https://script.google.com" crossorigin>
 <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
 <link rel="dns-prefetch" href="https://script.google.com">
 <link rel="dns-prefetch" href="https://script.googleusercontent.com">
-<title id="pageTitle">Memuat…</title>
+
 <style>
-  html,body{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:#f8faf9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;}
-  *{box-sizing:border-box;}
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#f8faf9;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;
+}
 
-  /* Iframe penuh layar — tanpa border/scrollbar ganda supaya terasa seperti
-     situs native, bukan halaman yang "membungkus" halaman lain. */
-  #appFrame{
-    position:fixed; inset:0;
-    width:100%; height:100%; height:100dvh;
-    border:none; display:block; background:#f8faf9;
-  }
+*{
+  box-sizing:border-box;
+}
 
-  /* Skeleton loading — dicopy dari palet desain aplikasi (emerald/heritage)
-     supaya transisi ke konten asli terasa mulus, tidak ada "flash" putih. */
-  #loader{
-    position:fixed; inset:0; z-index:10;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
-    background:#f8faf9; transition:opacity .22s ease, visibility .22s ease;
-  }
-  #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
-  .spinner{
-    width:38px; height:38px; border-radius:50%;
-    border:3px solid #d1fae5; border-top-color:#065f46;
-    animation:spin .8s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg);}}
-  #loaderText{font-size:13.5px; font-weight:600; color:#064e3b; letter-spacing:.01em;}
+#appFrame{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  height:100dvh;
+  border:none;
+  display:block;
+  background:#f8faf9;
+}
 
-  /* Pesan fallback kalau gasExecUrl belum diisi/salah */
-  #configError{
-    position:fixed; inset:0; z-index:20; display:none;
-    align-items:center; justify-content:center; padding:32px; text-align:center;
-    background:#f8faf9; font-size:14px; color:#4b5563; line-height:1.6;
+#loader{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  background:#f8faf9;
+  transition:opacity .25s ease,visibility .25s ease;
+}
+
+#loader.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.spinner{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:3px solid #d1fae5;
+  border-top-color:#065f46;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
   }
-  #configError.show{display:flex;}
-  #configError code{background:#eef2f0; padding:2px 6px; border-radius:4px; font-size:12.5px;}
+}
+
+#loaderText{
+  font-size:14px;
+  font-weight:600;
+  color:#065f46;
+}
+
+#configError{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  text-align:center;
+  background:#f8faf9;
+  color:#4b5563;
+  line-height:1.7;
+  z-index:10000;
+}
+
+#configError.show{
+  display:flex;
+}
+
+#configError code{
+  background:#eef2f0;
+  padding:2px 6px;
+  border-radius:4px;
+}
 </style>
+
 </head>
+
 <body>
 
-  <div id="loader">
-    <div class="spinner"></div>
-    <div id="loaderText">Memuat…</div>
+<div id="loader">
+  <div class="spinner"></div>
+  <div id="loaderText">Memuat aplikasi...</div>
+</div>
+
+<div id="configError">
+  <div>
+    ⚠️ URL Google Apps Script belum dikonfigurasi.<br><br>
+    Silakan isi <code>gasExecUrl</code> pada file <code>config.js</code>.
   </div>
+</div>
 
-  <div id="configError">
-    <div>
-      ⚠️ URL deployment Google Apps Script belum diatur.<br><br>
-      Buka file <code>config.js</code> di repo ini, isi <code>gasExecUrl</code>
-      dengan URL <code>/exec</code> hasil deploy Web App kamu, lalu commit &amp; push.
-    </div>
-  </div>
+<iframe
+  id="appFrame"
+  title="Rumah Eduwisata Sembalun"
+  allow="clipboard-write">
+</iframe>
 
-  <iframe id="appFrame" title="Aplikasi" allow="clipboard-write"></iframe>
+<script src="config.js"></script>
 
-  <script src="config.js"></script>
-  <script>
-    (function () {
-      var cfg = window.APP_CONFIG || {};
-      var loader = document.getElementById('loader');
-      var loaderText = document.getElementById('loaderText');
-      var errorBox = document.getElementById('configError');
-      var frame = document.getElementById('appFrame');
+<script>
+(function(){
 
-      document.getElementById('pageTitle').textContent = cfg.title || 'Aplikasi';
-      loaderText.textContent = cfg.loadingText || 'Memuat…';
+  const cfg = window.APP_CONFIG || {};
 
-      var url = cfg.gasExecUrl || '';
-      var isConfigured = url && url.indexOf('GANTI_DENGAN') === -1 && /^https:\/\/script\.google(usercontent)?\.com\//.test(url);
+  const frame = document.getElementById("appFrame");
+  const loader = document.getElementById("loader");
+  const errorBox = document.getElementById("configError");
+  const loaderText = document.getElementById("loaderText");
 
-      if (!isConfigured) {
-        loader.classList.add('hide');
-        errorBox.classList.add('show');
-        return;
-      }
+  document.title = cfg.title || "Rumah Eduwisata Sembalun";
 
-      frame.src = url;
+  if(cfg.loadingText){
+    loaderText.textContent = cfg.loadingText;
+  }
 
-      /* -----------------------------------------------------------------
-         Strategi peralihan cepat:
-         Event 'load' pada iframe baru terpicu setelah SEMUA resource di
-         dalamnya selesai (semua gambar produk, font, dsb) — itu bisa
-         memakan 10-15 detik meski konten sebenarnya sudah siap dilihat
-         jauh lebih cepat, karena aplikasi di dalam iframe SUDAH punya
-         skeleton loading sendiri (shimmer) yang tampil begitu HTML-nya
-         mulai dirender. Jadi loader wrapper ini sengaja disembunyikan
-         cepat (maks ~1.6 detik) supaya user langsung melihat skeleton asli
-         aplikasi alih-alih menatap spinner generik terlalu lama.
-      ----------------------------------------------------------------- */
-      var revealed = false;
-      function reveal() {
-        if (revealed) return;
-        revealed = true;
-        loader.classList.add('hide');
-      }
-      frame.addEventListener('load', reveal);
-      setTimeout(reveal, 1600); // batas atas: paksa tampil walau iframe belum "load" penuh
-    })();
-  </script>
+  const url = cfg.gasExecUrl || "";
+
+  const valid =
+    url &&
+    url.indexOf("GANTI_DENGAN") === -1 &&
+    /^https:\/\/script\.(googleusercontent|google)\.com\//.test(url);
+
+  if(!valid){
+    loader.classList.add("hide");
+    errorBox.classList.add("show");
+    return;
+  }
+
+  frame.src = url;
+
+  let revealed = false;
+
+  function reveal(){
+    if(revealed) return;
+    revealed = true;
+    loader.classList.add("hide");
+  }
+
+  frame.addEventListener("load", reveal);
+
+  setTimeout(reveal, 1600);
+
+})();
+</script>
+
 </body>
 </html>
